@@ -20,12 +20,13 @@ class nuclei_segmenter:
         
     def segment_nuclei(self,image_path):
         # read the image
-        image = plt.imread(image_path)
+        img = cv2.imread(image_path,0)
         ###### pre-processing #####
-        # convert to grayscale
-        gray_img = color.rgb2gray(image)
-        # apply median filter
-        filt_img = ndimage.median_filter(gray_img,self.filter_param)
+        # apply CLAHE and median filter
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        cl1 = clahe.apply(img)
+        cv2.medianBlur(img,5)
+        filt_img = img
         
         ##### segmentation #####
         # compute threshold
@@ -35,7 +36,7 @@ class nuclei_segmenter:
         # label
         labeled_img = measure.label(binary_img,background=0)
         # extract image properties
-        props_table = measure.regionprops_table(labeled_img,intensity_image=gray_img, properties=['area','centroid','major_axis_length','minor_axis_length','perimeter','eccentricity','solidity','max_intensity','min_intensity','bbox'])
+        props_table = measure.regionprops_table(labeled_img,intensity_image=filt_img, properties=['area','centroid','major_axis_length','minor_axis_length','perimeter','eccentricity','solidity','max_intensity','min_intensity','bbox'])
         nuclei_df = pd.DataFrame.from_dict(props_table)
         nuclei_df['centroid'] = nuclei_df[['centroid-0', 'centroid-1']].values.tolist()
         # threshold by area 
@@ -48,16 +49,10 @@ class nuclei_segmenter:
         nuclei_df['ID'] = image_path
         # if cropped image, limit to cell closest to the center of the image
         if self.cropped_flag:
-            img_ctr = [np.round(gray_img.shape[0]/2),np.round(gray_img.shape[1]/2)]
+            img_ctr = [np.round(filt_img.shape[0]/2),np.round(filt_img.shape[1]/2)]
             nuclei_df['ctr_score'] = nuclei_df['centroid'].apply(lambda x: dist.euclidean(x,img_ctr))
             if not nuclei_df.empty:
                 nuclei_df = nuclei_df.sort_values(by=['ctr_score']).iloc[0]
-            
-#             bbox0 = [0.15*gray_img.shape[0], 0.85*gray_img.shape[1]]
-#             bbox1 = [0.15*gray_img.shape[1], 0.85*gray_img.shape[1]]
-            
-#             nuclei_df = nuclei_df[(nuclei_df['centroid-0']>bbox0[0])&(nuclei_df['centroid-0']<bbox0[1])]
-#             nuclei_df = nuclei_df[(nuclei_df['centroid-1']>bbox1[0])&(nuclei_df['centroid-1']<bbox1[1])]
             
         return nuclei_df
         
