@@ -20,12 +20,13 @@ class nuclei_segmenter:
         
     def segment_nuclei(self,image_path):
         # read the image
-        image = plt.imread(image_path)
+        img = cv2.imread(image_path,0)
         ###### pre-processing #####
-        # convert to grayscale
-        gray_img = color.rgb2gray(image)
-        # apply median filter
-        filt_img = ndimage.median_filter(gray_img,self.filter_param)
+        # apply CLAHE and median filter
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        cl1 = clahe.apply(img)
+        cv2.medianBlur(img,5)
+        filt_img = img
         
         ##### segmentation #####
         # compute threshold
