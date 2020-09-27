@@ -11,22 +11,25 @@ import imutils
 from scipy.spatial import distance as dist
 
 class nuclei_segmenter:
-    def __init__(self,area_threshold,p2a_threshold,solidity_threshold,median_filter_param,cropped_flag):
+    def __init__(self,area_threshold=250,p2a_threshold=0.25,solidity_threshold=0.9,ksize=9, clipLimit=2.0,cropped_flag=0):
         self.area_threshold = area_threshold
         self.P2A_threshold = p2a_threshold
         self.solidity_threshold = solidity_threshold
-        self.filter_param = median_filter_param
+        self.ksize = ksize
+        self.clipLimit=clipLimit
         self.cropped_flag = cropped_flag
         
     def segment_nuclei(self,image_path):
         # read the image
         img = cv2.imread(image_path,0)
         ###### pre-processing #####
-        # apply CLAHE and median filter
-        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        # apply median filter
+        img = cv2.medianBlur(img,self.ksize)
+        # contrast-limited adaptive histogram equalization
+        tilesize = [np.round(img.shape[0]/25),np.round(img.shape[1]/25)]
+        clahe = cv2.createCLAHE(clipLimit=self.clipLimit, tileGridSize=(tilesize[0].astype('int'),tilesize[0].astype('int')))
         cl1 = clahe.apply(img)
-        cv2.medianBlur(img,5)
-        filt_img = img
+        filt_img = cl1
         
         ##### segmentation #####
         # compute threshold

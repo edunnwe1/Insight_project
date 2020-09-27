@@ -11,7 +11,7 @@ import imutils
 from scipy.spatial import distance as dist
 
 class nuclei_segmenter:
-    def __init__(self,area_threshold,p2a_threshold,solidity_threshold,median_filter_param,cropped_flag):
+    def __init__(self,area_threshold=250,p2a_threshold=0.25,solidity_threshold=0.9,median_filter_param=5,cropped_flag=0):
         self.area_threshold = area_threshold
         self.P2A_threshold = p2a_threshold
         self.solidity_threshold = solidity_threshold
@@ -52,12 +52,6 @@ class nuclei_segmenter:
             nuclei_df['ctr_score'] = nuclei_df['centroid'].apply(lambda x: dist.euclidean(x,img_ctr))
             if not nuclei_df.empty:
                 nuclei_df = nuclei_df.sort_values(by=['ctr_score']).iloc[0]
-            
-#             bbox0 = [0.15*gray_img.shape[0], 0.85*gray_img.shape[1]]
-#             bbox1 = [0.15*gray_img.shape[1], 0.85*gray_img.shape[1]]
-            
-#             nuclei_df = nuclei_df[(nuclei_df['centroid-0']>bbox0[0])&(nuclei_df['centroid-0']<bbox0[1])]
-#             nuclei_df = nuclei_df[(nuclei_df['centroid-1']>bbox1[0])&(nuclei_df['centroid-1']<bbox1[1])]
             
         return nuclei_df
         
