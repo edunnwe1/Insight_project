@@ -4,4 +4,3 @@ scikit-learn==0.23.2
 streamlit==0.67.1
 torch==1.6.0+cpu
 torchvision==0.7.0+cpu
-https://download.pytorch.org/whl/torch_stable.html
