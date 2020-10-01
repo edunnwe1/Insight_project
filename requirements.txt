@@ -1,4 +1,4 @@
-opencv-python==4.4.0
+opencv-python
 matplotlib==3.3.2
 scikit-learn==0.23.2
 streamlit==0.67.1
