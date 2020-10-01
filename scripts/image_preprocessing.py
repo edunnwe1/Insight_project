@@ -1,16 +1,17 @@
 import numpy as np
-from skimage import io, filters, color,exposure,feature,measure,segmentation
-from skimage.restoration import denoise_nl_means, estimate_sigma
-from skimage import img_as_ubyte, img_as_float
-from scipy import ndimage
+# from skimage import io, filters, color,exposure,feature,measure,segmentation
+# from skimage.restoration import denoise_nl_means, estimate_sigma
+# from skimage import img_as_ubyte, img_as_float
+# from scipy import ndimage
 import cv2 
 
 class img_preProcessor:
     
-    def __init__(self,ksize=5,clipLimit=2.0,radius=30):
+    def __init__(self,ksize=5,clipLimit=2.0,radius=30,tile=25):
         self.ksize = ksize # kernel size for the median filter
         self.clipLimit=clipLimit # clip limit for the CLAHE
         self.radius = radius # radius for rolling ball
+        self.tile = 25
         self.CLAHE_flag = 0 
         self.med_flag = 0
         self.NLM_flag = 0
@@ -26,7 +27,7 @@ class img_preProcessor:
         # split the channels
         l,a,b = cv2.split(lab_img)
         # apple CLAHE to L channel
-        tilesize = [np.round(color_img.shape[0]/25),np.round(color_img.shape[1]/25)] # tile size for local histograms, done this way to be consistent across cluster vs not cluster images 
+        tilesize = [np.round(color_img.shape[0]/self.tile),np.round(color_img.shape[1]/self.tile)] # tile size for local histograms, done this way to be consistent across cluster vs not cluster images 
         clahe = cv2.createCLAHE(clipLimit=self.clipLimit,tileGridSize=(tilesize[0].astype('int'),tilesize[0].astype('int')))
         clahe_img = clahe.apply(l)
         # combine the CLAHE enhanced L-channel back with the A and B channels
@@ -42,7 +43,7 @@ class img_preProcessor:
         # apply median filter
         med_img = cv2.medianBlur(gray_img,self.ksize)
         self.med_flag = 1
-        return med_img
+        return cv2.cvtColor(med_img, cv2.COLOR_GRAY2BGR)
         
     def apply_rolling_ball(self,color_img):
         # deprecated: too slow

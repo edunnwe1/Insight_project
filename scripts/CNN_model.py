@@ -1,9 +1,7 @@
 # cnn for feature extraction
 
 import torch
-import torch.optim as optim
 import torch.nn as nn
-
 import torchvision.models as models
 
 
