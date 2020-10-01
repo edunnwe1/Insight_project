@@ -1,6 +1,6 @@
+opencv-python==4.4.0
 matplotlib==3.3.2
 scikit-learn==0.23.2
 streamlit==0.67.1
 torch==1.6.0
 torchvision==0.7.0
-opencv==4.3.0
