@@ -2,5 +2,4 @@ opencv-python-headless
 matplotlib==3.3.2
 scikit-learn==0.23.2
 streamlit==0.67.1
-http://download.pytorch.org/whl/cpu/torch-0.4.1-cp36-cp36m-linux_x86_64.whl
-torchvision == 0.7.0 
+pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
