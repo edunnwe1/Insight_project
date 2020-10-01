@@ -50,7 +50,7 @@ if uploaded_file is not None:
         img_as_tensor = transforms.ToTensor()(img).unsqueeze_(0)
 
         # get features
-        features = model(img_as_tensor).squeeze(axis=0).sum(axis=[1,2]).detach().numpy() #sum pooling, paper says good extractor
+        features = model(img_as_tensor).squeeze(dim=0).sum(axis=[1,2]).detach().numpy() #sum pooling, paper says good extractor
 
         # make df, concatenate
         df = pd.DataFrame(features).transpose()
