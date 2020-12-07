@@ -61,7 +61,7 @@ class nuclei_segmenter:
             nuclei_df['ctr_score'] = nuclei_df['centroid'].apply(lambda x: dist.euclidean(x,img_ctr))
             if not nuclei_df.empty:
                 nuclei_df = nuclei_df.sort_values(by=['ctr_score']).iloc[0]    
-        if nuclei_df.empty:
-            nuclei_df = pd.DataFrame(nuclei_df.apply(lambda x: np.nan)).transpose()
+#         if nuclei_df.empty:
+#             nuclei_df = pd.DataFrame(nuclei_df.apply(lambda x: np.nan)).transpose()
         return nuclei_df
         
