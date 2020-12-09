@@ -1,6 +1,7 @@
 # Insight_project
 
 NOTE: This project is in progress. See the 'To-do' list at the end of this readme. 
+
 NOTE: Please also note that there was a massive data leakage issue with the dataset used for this project, which was discovered late in the game. Below, I lay out the motivation of the project, as well as the approach, to give context to the code that is written here. However, I will add a segment at the end discussing the data leakage issue and why these results are at fault. This is really important for anyone planning on using this dataset in the future, as there are few publically available cervical cancer datasets out there. 
 
 Cervical cancer is the 4th leading cancer in women, causing roughly 300,000 deaths annually, even though it is preventable with regular screening. Low income countries have the highest incidences of cervical cancer related deaths, and cervical cancer is the leading cause of death in some countries in Africa. A substantial contributing factor is that low-income countries have a shortage of trained cytotechnicians that can read cervical cancer screens (called pap smears), so that the few technicians are overburdened. 
