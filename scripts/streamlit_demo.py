@@ -4,8 +4,6 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from matplotlib.collections import PatchCollection
-import seaborn as sns
-import statistics as stats
 from os import listdir
 from skimage import io, filters, color,exposure,feature,measure,segmentation
 from scipy import ndimage
