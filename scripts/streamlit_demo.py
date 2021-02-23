@@ -28,7 +28,8 @@ if uploaded_file is not None:
     st.image(cv2.cvtColor(img,cv2.COLOR_BGR2RGB), caption='Uploaded Image.', use_column_width=True)
     # segment nuclei
     seg = nuclei_segmenter(tile=125)
-    nuclei_df,filt_img = seg.segment_nuclei(img)
+    nuclei_df = seg.segment_nuclei(img)
+    filt_img = seg.filt_img
     # display the filtered image
     st.image(filt_img, caption='Filtered Image.', use_column_width=True)
     # classify the identified nuclei

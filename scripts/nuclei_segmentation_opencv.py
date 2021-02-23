@@ -21,10 +21,17 @@ class nuclei_segmenter:
         self.cropped_flag = cropped_flag
         self.numClasses = numClasses
         self.tile = tile
+        self.color_img = None
+        self.image_path = None
     
-    def prep_img(self,image_path):
-        # read the image
+    def read_img(self,image_path):
         self.color_img = cv2.imread(image_path,1)
+        self.image_path = image_path
+    
+    def prep_img(self,color_img=None):
+        if self.color_img is None:
+            self.color_img = color_img
+        # convert to gray
         self.original_gray = cv2.cvtColor(self.color_img,cv2.COLOR_BGR2GRAY)
         # process the image
         prep = img_preProcessor(ksize=self.ksize,clipLimit=self.clipLimit,tile=self.tile)
@@ -66,9 +73,9 @@ class nuclei_segmenter:
         
         return nuclei_df
     
-    def segment_nuclei(self,image_path):
+    def segment_nuclei(self,color_img = None):
         # prep image
-        self.prep_img(image_path)
+        self.prep_img(color_img)
         
         # get labeled nuclei
         self.get_mask()
@@ -80,7 +87,7 @@ class nuclei_segmenter:
         nuclei_df = self.debris_filter(nuclei_df)
         
         # add image path ID 
-        nuclei_df['ID'] = image_path
+        nuclei_df['ID'] = self.image_path
         
         # if cropped image, limit to cell closest to the center of the image
         if self.cropped_flag:
