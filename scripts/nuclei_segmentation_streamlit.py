@@ -12,9 +12,9 @@ from scipy.spatial import distance as dist
 from image_preprocessing import img_preProcessor
 
 class nuclei_segmenter:
-    def __init__(self,area_threshold=325,p2a_threshold=0.25,solidity_threshold=0.9,ksize=3, clipLimit=2.0,cropped_flag=0,numClasses=5,tile=25):
+    def __init__(self,area_threshold=325,major_minor=2.5,solidity_threshold=0.6,ksize=3, clipLimit=2.0,cropped_flag=0,numClasses=5,tile=25):
         self.area_threshold = area_threshold
-        self.P2A_threshold = p2a_threshold
+        self.major_minor = major_minor 
         self.solidity_threshold = solidity_threshold
         self.ksize = ksize
         self.clipLimit=clipLimit
@@ -39,13 +39,14 @@ class nuclei_segmenter:
         # label
         labeled_img = measure.label(binary_img,background=0)
         # extract image properties
-        props_table = measure.regionprops_table(labeled_img,intensity_image=original_gray, properties=['area','centroid','extent','perimeter','eccentricity','solidity','mean_intensity','bbox'])
+        props_table = measure.regionprops_table(labeled_img,intensity_image=original_gray, properties=['area','centroid','extent','perimeter','eccentricity','solidity','mean_intensity','major_axis_length','minor_axis_length','bbox'])
         nuclei_df = pd.DataFrame.from_dict(props_table)
         nuclei_df['centroid'] = nuclei_df[['centroid-0', 'centroid-1']].values.tolist()
         # threshold by area 
         nuclei_df = nuclei_df[nuclei_df['area']>self.area_threshold]
-        # threshold by perimeter-to-area (P2A)
-        nuclei_df = nuclei_df[nuclei_df['perimeter']/nuclei_df['area']<self.P2A_threshold]
+        # threshold by major_minor axis length (first, add feature)
+        nuclei_df['major_to_minor'] = nuclei_df['major_axis_length']/nuclei_df['minor_axis_length']
+        nuclei_df = nuclei_df[nuclei_df['major_to_minor'] < self.major_minor]
         # threshold by solidity
         nuclei_df = nuclei_df[nuclei_df['solidity']>self.solidity_threshold]
         # add intensity by channel - BGR because openCV

@@ -12,8 +12,9 @@ from scipy.spatial import distance as dist
 from image_preprocessing import img_preProcessor
 
 class nuclei_segmenter:
-    def __init__(self,area_threshold=250,solidity_threshold=0.9,ksize=3, clipLimit=2.0,cropped_flag=0,numClasses=5,tile=25):
+    def __init__(self,area_threshold=250,solidity_threshold=0.6,major_minor=2.5,ksize=3, clipLimit=2.0,cropped_flag=0,numClasses=5,tile=25):
         self.area_threshold = area_threshold
+        self.major_minor = major_minor
         self.solidity_threshold = solidity_threshold
         self.ksize = ksize
         self.clipLimit=clipLimit
@@ -45,8 +46,9 @@ class nuclei_segmenter:
         nuclei_df['centroid'] = nuclei_df[['centroid-0', 'centroid-1']].values.tolist()
         # threshold by area 
         nuclei_df = nuclei_df[nuclei_df['area']>self.area_threshold]
-        # threshold by perimeter-to-area (P2A)
-#         nuclei_df = nuclei_df[nuclei_df['perimeter']/nuclei_df['area']<self.P2A_threshold]
+        # threshold by major:minor axis length
+        nuclei_df['major_to_minor'] = nuclei_df['major_axis_length']/nuclei_df['minor_axis_length']
+        nuclei_df = nuclei_df[nuclei_df['major_to_minor']<self.major_minor]
         # threshold by solidity
         nuclei_df = nuclei_df[nuclei_df['solidity']>self.solidity_threshold]
         # add intensity by channel - BGR because openCV
