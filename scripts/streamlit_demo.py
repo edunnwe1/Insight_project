@@ -11,7 +11,7 @@ import cv2
 import sys
 sys.path.append('../scripts/')
 sys.path.append('../models/')
-from nuclei_segmentation_streamlit import nuclei_segmenter
+from nuclei_segmentation_opencv import nuclei_segmenter
 import pickle
 # Sipakmed_model = pickle.load(open('../models/Sipakmed_nuc_model','rb'))
 Sipakmed_model = pickle.load(open('../models/Sipakmed_ext_model','rb'))
