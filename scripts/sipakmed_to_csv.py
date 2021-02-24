@@ -9,13 +9,13 @@ def sipakmed_to_csv(s_path):
     
     sipakmed_df = pd.DataFrame() #initialize empty dataframe
 
-    for file in listdir(s_path)[1:]:
+    for file in listdir(s_path)[0:]:
         if file.endswith(".dat"):
             df2 = pd.read_table(s_path+file, sep=',',header=None)
             # add features
-            if 'CYTO' in file:
-                df2[28] = 'cyto'
-            elif 'NUC' in file:
+            if 'NUC' in file:
+                df2[28] = 'NUC'
+            else:
                 df2[28] = 'nuc'
             df2[29] = file[0].lower()
             if file[0].lower() in 'sp':
