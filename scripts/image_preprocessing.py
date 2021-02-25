@@ -7,21 +7,68 @@ import cv2
 
 class img_preProcessor:
     
-    def __init__(self,ksize=5,clipLimit=2.0,radius=30,tile=25):
+    """
+        This class performs image processing on a color image (median filtering, CLAHE)
+        
+        Instance Variables
+        ------------------
+        ksize : int
+            size of the kernel for contrast-limited adaptive histogram equalization (CLAHE)
+            
+        clipLimit : int
+            clip limit for CLAHE
+            
+        tile : int
+            size of the tile for CLAHE
+        
+        Methods
+        ------------------
+        read_img(image_path)
+            reads the color image from image_path using cv2.imread
+            
+        apply_CLAHE(color_img)
+            applies CLAHE to the image
+            
+        apply_med_filt(color_img)
+            applies median filtering to the image
+        
+    """
+    
+    def __init__(self,ksize=5,clipLimit=2.0,tile=25):
+        
+        """
+        Parameters
+        ------------------
+        ksize : int
+            size of the kernel for contrast-limited adaptive histogram equalization (CLAHE)
+            
+        clipLimit : int
+            clip limit for CLAHE
+            
+        tile : int
+            size of the tile for CLAHE
+            
+        CLAHE_flag : boolean
+            whether or not CLAHE was performed
+            
+        med_flag : boolean
+            whether or not median filtering was performed
+        """
+
         self.ksize = ksize # kernel size for the median filter
         self.clipLimit=clipLimit # clip limit for the CLAHE
-        self.radius = radius # radius for rolling ball
         self.tile = 25
         self.CLAHE_flag = 0 
         self.med_flag = 0
-        self.NLM_flag = 0
-        self.rolling_flag = 0
         
     def read_img(self,image_path):
         color_img = cv2.imread(image_path,1) # need to make sure we read with opencv to use other opencv functions. note: opencv is BGR
         return color_img
     
     def apply_CLAHE(self,color_img):
+        """
+            Applies CLAHE to color_img
+        """
         # convert the image into LAB - first channel (L) becomes a luminance only channel
         lab_img = cv2.cvtColor(color_img, cv2.COLOR_BGR2LAB)
         # split the channels
@@ -38,6 +85,9 @@ class img_preProcessor:
         return CLAHE_img
         
     def apply_med_filt(self,color_img):
+        """
+            Applies median filtering to color_img
+        """
         # convert the image to grayscale
         gray_img = cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
         # apply median filter
@@ -45,17 +95,6 @@ class img_preProcessor:
         self.med_flag = 1
         return cv2.cvtColor(med_img, cv2.COLOR_GRAY2BGR)
         
-    def apply_rolling_ball(self,color_img):
-        # deprecated: too slow
-        pass
-    
-#         from cv2_rolling_ball import subtract_background_rolling_ball
-#         # convert the image to grayscale
-#         gray_img = cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
-#         # apply rolling ball 
-#         final_img, background = subtract_background_rolling_ball(gray_img, self.radius, light_background=True,
-#                                              use_paraboloid=False, do_presmooth=True)
-#         return final_img, background
         
     
     
