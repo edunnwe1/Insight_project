@@ -14,7 +14,7 @@ sys.path.append('../models/')
 from nuclei_segmentation_opencv import nuclei_segmenter
 import pickle
 # Sipakmed_model = pickle.load(open('../models/Sipakmed_nuc_model','rb'))
-Sipakmed_model = pickle.load(open('../models/Sipakmed_ext_model','rb'))
+Sipakmed_model = pickle.load(open('../models/Sipakmed_model','rb'))
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
@@ -33,7 +33,7 @@ if uploaded_file is not None:
     # display the filtered image
     st.image(filt_img, caption='Filtered Image.', use_column_width=True)
     # classify the identified nuclei
-    preds = Sipakmed_model.predict(nuclei_df[['area','eccentricity','solidity','meanI_R','meanI_G','meanI_B']])
+    preds = Sipakmed_model.predict(nuclei_df[['cluster_id','Class','area','major_axis_length','minor_axis_length','major_to_minor','eccentricity','solidity','Normal']])
     # display image with bounding boxes around abnormal nuclei
     flagged_nuclei = nuclei_df.iloc[preds==0]
     fig = plt.figure()
