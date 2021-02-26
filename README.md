@@ -33,7 +33,7 @@ This tool works as follow:
 5. Finally, the original image is annotated to have bounding boxes surrounding the extracted nuclei, where a red bounding box indicates a nucleus identified as abnormal and a green bounding box indicates a nucleus identified as normal
 
 #### Status:
-The model was successfully trained on the existing Sipakmed database of nucleus features. The code to extract the nuclei has been written and is functional, but is not yet very precise, working better on some images than others. The entire pipeline has been converted into a streamlit app.
+The model was successfully trained on a viable subset of the existing Sipakmed database of nucleus features with an ROC_AUC score of 93%. The code to extract the nuclei has been written and is functional, but is not yet very precise, working better on some images than others. The entire pipeline has been converted into a streamlit app.
 
 Future iterations should allow the upload of multiple images, and the tool should arrange those images in order of probability of an abnormal cell (prob_a output from the model)
 
