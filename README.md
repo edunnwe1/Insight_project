@@ -11,7 +11,7 @@ This project segments the nuclei of cervical cancer cells from the Sipakmed data
 
 #### Code and notebooks overview:
 ##### Notebooks
-There are three notebooks, ordered numerically and named with short descriptors. They illustrate exploratory data analysis (EDA), the functionality of the nucleus segmenter code, and the development and hyper tuning of the model. 
+There are three notebooks, ordered numerically and named with short descriptors. They illustrate exploratory data analysis (EDA), the functionality of the nucleus segmenter code, and the development and hyperparameter tuning of the model. 
 ##### Code (Scripts)
 There are two main Python classes written for this project, the nucleus_segmenter (imported from nuclei_segmentation_opencv.py) and the image_preProcessor (imported from image_preprocessing.py). The nucleus_segmenter class is the most important. Additionally, scripts were written with helpful data wrangling functions. sipakmed_to_csv.py compiles the external .dat data into a single csv file, and extract_nucleus_features.py applies the nucleus_segmenter in batch to all cropped images in the database. Finally, streamlit_demo.py is the code to implement a local streamlit demo of the tool (described in the next section).
 ##### Models
