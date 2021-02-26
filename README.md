@@ -21,6 +21,7 @@ The data (not included here) should have the following folders:
 * external 
 * extracted
 * processed
+
 The external folder contains the sipakmed database features and pictures. The extracted folder is where extracted nucleus features are saved. The processed folder is where the compiled sipakmed database is saved. Future iterations of this project will include code to set up the appropriate file structure. 
 
 #### Tool Description:
